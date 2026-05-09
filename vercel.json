@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/", "destination": "/fbym.html" },
-    { "source": "/download", "destination": "/download.html" }
+  "builds": [
+    {
+      "src": "fbym.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/fbym.html"
+    }
   ]
 }
