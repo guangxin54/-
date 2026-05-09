@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mynote 发布页</title>
+  <style>
+    :root{
+      --bg:#f5f2eb;
+      --bg-2:#f8f6f1;
+      --panel:#fbf9f5;
+      --line:#ddd2c1;
+      --line-2:#e8dfd2;
+      --text:#1f1b16;
+      --muted:#7f7669;
+      --brand:#9fc57a;
+      --brand-deep:#7fa35d;
+      --chip:#f7f1e8;
+      --shadow:0 18px 50px rgba(79,58,28,.08);
+      --radius-xl:34px;
+      --radius-lg:24px;
+      --radius-md:18px;
+      --max:1220px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+      background:
+        linear-gradient(180deg,var(--bg-2) 0%, var(--bg) 100%);
+      color:var(--text);
+    }
+    a{text-decoration:none;color:inherit}
+    .container{width:min(var(--max),calc(100% - 48px));margin:0 auto}
+
+    .topbar{
+      border-bottom:1px solid var(--line);
+      background:rgba(248,246,241,.88);
+      backdrop-filter: blur(14px);
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .topbar-inner{
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-weight:700;
+    }
+    .brand-mark{
+      width:40px;height:40px;border-radius:14px;
+      display:grid;place-items:center;
+      background:#f0ebe2;
+      border:1px solid var(--line);
+      color:#6b6257;
+      font-size:18px;
+      box-shadow:var(--shadow);
+    }
+    .brand-meta{
+      display:flex;
+      flex-direction:column;
+      line-height:1.15;
+    }
+    .brand-meta small{
+      color:var(--muted);
+      letter-spacing:.08em;
+      font-size:12px;
+      text-transform:uppercase;
+      font-weight:600;
+    }
+    .brand-meta strong{
+      font-size:24px;
+      font-weight:800;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .nav a:hover{color:var(--text)}
+
+    .hero-wrap{
+      padding:28px 0 22px;
+    }
+    .hero{
+      border:1px solid var(--line);
+      border-radius:40px;
+      background:var(--panel);
+      box-shadow:var(--shadow);
+      padding:34px 34px 24px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 16px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:#6e6458;
+      background:var(--chip);
+      font-size:14px;
+      font-weight:600;
+      letter-spacing:.02em;
+    }
+    .badge .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:#8a9070;
+      display:block;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      margin-top:28px;
+    }
+
+    .hero-icon{
+      width:72px;height:72px;border-radius:22px;
+      display:grid;place-items:center;
+      background:#f4efe6;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      margin-bottom:20px;
+    }
+    .hero-icon-inner{
+      width:46px;height:46px;border-radius:8px;
+      background:var(--brand);
+      display:grid;place-items:center;
+      color:#31431e;
+      font-size:22px;
+      font-weight:800;
+    }
+
+    h1{
+      font-size:clamp(38px,5.2vw,64px);
+      line-height:1.08;
+      letter-spacing:-.03em;
+      margin:0 0 18px;
+    }
+    .lead{
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.9;
+      margin:0 0 26px;
+      max-width:760px;
+    }
+
+    .actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+    .btn{
+      padding:14px 18px;
+      border-radius:16px;
+      font-weight:700;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border:1px solid var(--line);
+      background:#f8f5ef;
+    }
+    .btn.primary{
+      background:var(--brand);
+      border-color:#92b66f;
+      color:#253118;
+    }
+    .btn.secondary{
+      color:#5e564c;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:8px;
+    }
+    .stat{
+      padding:16px 18px;
+      border:1px solid var(--line-2);
+      border-radius:18px;
+      background:#faf7f2;
+    }
+    .stat .k{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+    .stat .t{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:4px;
+    }
+
+    .preview{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:#faf7f2;
+      padding:16px;
+      min-height:510px;
+      box-shadow:var(--shadow);
+    }
+    .preview-window{
+      border:1px solid var(--line);
+      border-radius:24px;
+      overflow:hidden;
+      background:#f7f4ef;
+      height:100%;
+    }
+    .preview-top{
+      height:54px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 16px;
+      border-bottom:1px solid var(--line);
+      color:#6c6357;
+      font-size:13px;
+      background:#f5f0e7;
+    }
+    .traffic{display:flex;gap:8px}
+    .traffic span{
+      width:10px;height:10px;border-radius:50%;display:block;background:#d6caba;
+    }
+    .preview-body{
+      display:grid;
+      grid-template-columns:220px 1fr;
+      min-height:455px;
+    }
+    .sidebar{
+      padding:16px;
+      border-right:1px solid var(--line);
+      background:#f3eee5;
+    }
+    .side-item{
+      padding:11px 12px;
+      border:1px solid transparent;
+      border-radius:14px;
+      color:#6b6258;
+      margin-bottom:10px;
+      font-size:14px;
+      background:rgba(255,255,255,.38);
+    }
+    .side-item.active{
+      background:#fbf8f3;
+      border-color:var(--line);
+      color:#1f1b16;
+      font-weight:700;
+    }
+    .editor{
+      padding:18px;
+    }
+    .editor-card{
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:#fdfbf7;
+      padding:18px;
+    }
+    .editor-card h3{
+      margin:0 0 12px;
+      font-size:24px;
+      letter-spacing:-.02em;
+    }
+    .line{
+      height:10px;
+      border-radius:999px;
+      background:linear-gradient(90deg,#ddd4c8,#f3eee5);
+      margin:10px 0;
+    }
+    .w90{width:90%}
+    .w75{width:75%}
+    .w58{width:58%}
+    .chips{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;
+    }
+    .chip{
+      font-size:12px;
+      color:#5a534a;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#f5f0e7;
+    }
+
+    section{
+      padding:12px 0 20px;
+    }
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:24px;
+      margin-bottom:18px;
+    }
+    .section-head h2{
+      margin:0;
+      font-size:32px;
+      letter-spacing:-.02em;
+    }
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.85;
+      max-width:760px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:var(--panel);
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+    .icon{
+      width:42px;height:42px;border-radius:14px;
+      display:grid;place-items:center;
+      background:#f0ebe2;
+      border:1px solid var(--line);
+      color:#676055;
+      margin-bottom:14px;
+      font-size:18px;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:22px;
+      letter-spacing:-.02em;
+    }
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.85;
+    }
+
+    .shots{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+    .shot{
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:var(--panel);
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+    .placeholder{
+      height:230px;
+      border-radius:20px;
+      border:1px dashed var(--line);
+      background:
+        linear-gradient(180deg,#f4efe6 0%,#fbf8f3 100%);
+      display:grid;
+      place-items:center;
+      color:#706658;
+      font-weight:700;
+    }
+    .caption{
+      padding:12px 6px 4px;
+    }
+    .caption h4{
+      margin:0 0 4px;
+      font-size:18px;
+    }
+    .caption p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.8;
+    }
+
+    .version-grid,.download{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+    .info-list{display:grid;gap:10px}
+    .info-row{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      padding:12px 0;
+      border-bottom:1px dashed var(--line);
+    }
+    .info-row:last-child{border-bottom:none}
+    .label{color:var(--muted)}
+    .steps{display:grid;gap:12px;margin-top:10px}
+    .step{display:flex;gap:12px;align-items:flex-start}
+    .step-num{
+      width:28px;height:28px;border-radius:999px;
+      display:grid;place-items:center;
+      background:#f0ebe2;
+      border:1px solid var(--line);
+      color:#5f574d;
+      font-size:13px;
+      font-weight:800;
+      flex:none;
+    }
+
+    .footer{
+      padding:32px 0 54px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width: 980px){
+      .hero-grid,.version-grid,.download,.grid-3,.shots{grid-template-columns:1fr}
+      .preview-body{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .section-head{align-items:start;flex-direction:column}
+      .stats{grid-template-columns:1fr}
+    }
+    @media (max-width: 700px){
+      .container{width:min(var(--max),calc(100% - 24px))}
+      .hero{padding:24px 20px 20px;border-radius:28px}
+      .nav{display:none}
+      h1{font-size:40px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">🗒</div>
+        <div class="brand-meta">
+          <small>Mynote</small>
+          <strong>笔记工作台</strong>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#features">主要功能</a>
+        <a href="#shots">界面截图</a>
+        <a href="#version">版本说明</a>
+        <a href="#download">客户端下载</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero-wrap">
+    <div class="container">
+      <section class="hero">
+        <div class="badge"><span class="dot"></span> Premium Note Workspace</div>
+
+        <div class="hero-grid">
+          <div>
+            <div class="hero-icon">
+              <div class="hero-icon-inner">✦</div>
+            </div>
+            <h1>为深度工作而设计的桌面笔记空间</h1>
+            <p class="lead">
+              简洁、克制、安静。把灵感、会议纪要、项目记录与知识图谱整理进同一个桌面工作台，
+              同时保留智能问答与结构化知识管理能力。
+            </p>
+            <div class="actions">
+              <a class="btn primary" href="#download">⬇ 下载 Windows 客户端</a>
+              <a class="btn secondary" href="#features">查看主要功能</a>
+            </div>
+            <div class="stats">
+              <div class="stat"><div class="k">v2.1.0</div><div class="t">当前打包版本</div></div>
+              <div class="stat"><div class="k">DeepSeek</div><div class="t">默认知识抽取模式</div></div>
+              <div class="stat"><div class="k">Desktop</div><div class="t">Electron 本地运行</div></div>
+            </div>
+          </div>
+
+          <div class="preview">
+            <div class="preview-window">
+              <div class="preview-top">
+                <div class="traffic"><span></span><span></span><span></span></div>
+                <div>Mynote Desktop Preview</div>
+                <div>Workspace</div>
+              </div>
+              <div class="preview-body">
+                <aside class="sidebar">
+                  <div class="side-item active">欢迎来到我的笔记</div>
+                  <div class="side-item">项目周报与任务规划</div>
+                  <div class="side-item">知识图谱测试样例</div>
+                  <div class="side-item">智能问答记录</div>
+                  <div class="side-item">分类与标签管理</div>
+                </aside>
+                <main class="editor">
+                  <div class="editor-card">
+                    <h3>欢迎来到 Mynote</h3>
+                    <div class="line w90"></div>
+                    <div class="line"></div>
+                    <div class="line w75"></div>
+                    <div class="line w58"></div>
+                    <div class="chips">
+                      <span class="chip">双模式编辑</span>
+                      <span class="chip">知识图谱</span>
+                      <span class="chip">智能问答</span>
+                      <span class="chip">全文搜索</span>
+                    </div>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="container">
+      <div class="section-head">
+        <h2>主要功能</h2>
+        <p>发布页围绕当前桌面客户端版本展开，重点说明用户认证、笔记管理、知识图谱生成与智能问答等核心能力。</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="icon">🔐</div>
+          <h3>用户认证</h3>
+          <p>支持注册、登录、会话校验与退出登录，用户数据按身份独立管理，保证个人笔记与状态隔离。</p>
+        </article>
+        <article class="card">
+          <div class="icon">📝</div>
+          <h3>双模式编辑</h3>
+          <p>支持简单文本模式与块编辑模式，适应日常记录、结构化整理与持续写作等不同场景。</p>
+        </article>
+        <article class="card">
+          <div class="icon">🏷️</div>
+          <h3>分类与检索</h3>
+          <p>支持分类、标签与标题/正文检索，便于在持续积累的笔记中快速定位所需内容。</p>
+        </article>
+        <article class="card">
+          <div class="icon">🧠</div>
+          <h3>知识图谱生成</h3>
+          <p>围绕当前笔记抽取实体与关系，组织为结构化图谱，用于知识展示与后续问答调用。</p>
+        </article>
+        <article class="card">
+          <div class="icon">💬</div>
+          <h3>智能问答</h3>
+          <p>基于当前笔记图谱与相关证据生成回答，并将回答所依赖的实体、关系和文本片段一并展示。</p>
+        </article>
+        <article class="card">
+          <div class="icon">⚡</div>
+          <h3>桌面端体验</h3>
+          <p>依托 Electron 本地运行环境，结合本地数据存储与窗口控制，形成稳定的桌面工作流。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="shots">
+    <div class="container">
+      <div class="section-head">
+        <h2>界面截图</h2>
+        <p>这里预留了适合论文和发布页展示的截图区域，你可以直接替换为真实的系统界面截图。</p>
+      </div>
+      <div class="shots">
+        <div class="shot">
+          <div class="placeholder">登录 / 注册界面截图位</div>
+          <div class="caption">
+            <h4>用户认证界面</h4>
+            <p>展示统一的登录与注册入口、表单校验反馈以及会话状态切换效果。</p>
+          </div>
+        </div>
+        <div class="shot">
+          <div class="placeholder">笔记主界面截图位</div>
+          <div class="caption">
+            <h4>笔记管理主界面</h4>
+            <p>展示左侧笔记列表、右侧编辑区域、双模式编辑器以及分类标签管理效果。</p>
+          </div>
+        </div>
+        <div class="shot">
+          <div class="placeholder">图谱 / 问答界面截图位</div>
+          <div class="caption">
+            <h4>知识图谱与智能问答</h4>
+            <p>展示实体与关系可视化，以及围绕当前笔记展开的智能问答过程。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="version">
+    <div class="container">
+      <div class="section-head">
+        <h2>版本说明</h2>
+        <p>发布页中的版本信息应与桌面客户端打包结果保持一致，便于用户确认下载版本与功能范围。</p>
+      </div>
+      <div class="version-grid">
+        <div class="card">
+          <h3>当前发布信息</h3>
+          <div class="info-list">
+            <div class="info-row"><span class="label">项目名称</span><strong>Mynote</strong></div>
+            <div class="info-row"><span class="label">当前版本</span><strong>v2.1.0</strong></div>
+            <div class="info-row"><span class="label">打包平台</span><strong>Windows 64-bit</strong></div>
+            <div class="info-row"><span class="label">技术栈</span><strong>Electron + Vue 3 + TypeScript</strong></div>
+            <div class="info-row"><span class="label">知识抽取</span><strong>DeepSeek LLM</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>本版本重点</h3>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div>统一桌面端界面风格与主工作区布局，强调安静、克制的笔记体验。</div></div>
+            <div class="step"><div class="step-num">2</div><div>增强知识图谱生成能力，支持基于 DeepSeek 的实体与关系抽取。</div></div>
+            <div class="step"><div class="step-num">3</div><div>优化图谱展示与问答入口组织，使知识结构与笔记工作流更自然衔接。</div></div>
+            <div class="step"><div class="step-num">4</div><div>保留图数据库不可用时的回退策略，保证图谱功能连续可用。</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="container">
+      <div class="section-head">
+        <h2>客户端下载</h2>
+        <p>下载区域用于承接 Electron 打包产物说明。真实上线时，可将按钮替换为网盘、对象存储或 GitHub Release 链接。</p>
+      </div>
+      <div class="download">
+        <div class="card">
+          <h3>Windows 桌面客户端</h3>
+          <p class="lead" style="font-size:15px;max-width:none;margin-top:8px">
+            当前版本已完成 Windows 平台打包，可提供安装版或便携版客户端供用户下载并本地运行。
+          </p>
+          <div class="actions">
+            <a class="btn primary" href="javascript:void(0)">下载 Mynote v2.1.0</a>
+            <a class="btn secondary" href="javascript:void(0)">查看更新日志</a>
+          </div>
+          <div class="info-list" style="margin-top:18px">
+            <div class="info-row"><span class="label">推荐系统</span><strong>Windows 10 / 11</strong></div>
+            <div class="info-row"><span class="label">运行方式</span><strong>本地安装 / 便携运行</strong></div>
+            <div class="info-row"><span class="label">核心能力</span><strong>笔记、图谱、问答一体化</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>安装说明</h3>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div>下载安装包或便携版压缩文件。</div></div>
+            <div class="step"><div class="step-num">2</div><div>解压后运行 <strong>Mynote.exe</strong>。</div></div>
+            <div class="step"><div class="step-num">3</div><div>首次启动后完成用户注册或登录。</div></div>
+            <div class="step"><div class="step-num">4</div><div>进入系统后即可使用笔记管理、知识图谱与智能问答等功能。</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      Mynote 发布页示意设计 · 采用与你当前系统界面相近的暖白、米色边框与浅绿色强调色
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var target = document.querySelector(a.getAttribute('href'));
+        if(target){
+          e.preventDefault();
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      })
+    })
+  </script>
+</body>
+</html>
